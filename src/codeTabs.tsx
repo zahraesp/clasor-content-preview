@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import SyntaxHighLighter from "react-syntax-highlighter";
 import { vs2015 } from "react-syntax-highlighter/dist/cjs/styles/hljs";
-import "./tailwind.css";
 
 declare interface IProps {
   languages: {

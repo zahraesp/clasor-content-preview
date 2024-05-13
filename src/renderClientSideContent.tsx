@@ -8,7 +8,6 @@ import FileAttachment from "./fileAttachment";
 import { EChart } from "./interface/contentPreview.interface";
 import { IsJsonString } from "./utils/helpers";
 import BackToTop from "./backToTop";
-import './tailwind.css';
 
 interface IProps {
   versionId?: number;
