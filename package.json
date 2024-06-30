@@ -12,7 +12,7 @@
   },
   "scripts": {
     "start": "tsdx watch",
-    "build": "NODE_ENV=production tsdx build",
+    "build": "tsdx build",
     "test": "tsdx test",
     "lint": "tsdx lint",
     "prepare": "tsdx build",
@@ -55,6 +55,7 @@
     "typescript": "^3.9.10"
   },
   "dependencies": {
+    "@headlessui/react": "^2.1.1",
     "react-chartjs-2": "^3.3.0",
     "react-pdf": "^5.7.2",
     "react-syntax-highlighter": "^15.5.0"

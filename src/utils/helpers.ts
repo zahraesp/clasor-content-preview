@@ -13,3 +13,42 @@ export const IsJsonString = (str: string): boolean => {
   }
   return true;
 };
+
+export const dereferenceSwagger = async (swagger: { [key: string]: any }) => {
+  const dereferencedSwagger = { ...swagger };
+
+  const resolveRef = (refPath: string, obj: any) => {
+    const parts = refPath.split("/").slice(1);
+    let result: any = obj;
+    for (const part of parts) {
+      result = result[part];
+    }
+    return result;
+  };
+
+  const traverse = (obj: any, visited: Set<any> = new Set()): any => {
+    if (visited.has(obj)) {
+      return obj;
+    }
+    visited.add(obj);
+
+    if (typeof obj !== "object" || obj === null) {
+      return obj;
+    }
+    if ("$ref" in obj) {
+      const refPath = obj.$ref;
+      const referencedObject = resolveRef(refPath, swagger);
+      return traverse(referencedObject, visited);
+    }
+    if (Array.isArray(obj)) {
+      return obj.map((item) => traverse(item, visited));
+    }
+    const newObj: any = {};
+    for (const key in obj) {
+      newObj[key] = traverse(obj[key], visited);
+    }
+    return newObj;
+  };
+
+  return traverse(dereferencedSwagger);
+};

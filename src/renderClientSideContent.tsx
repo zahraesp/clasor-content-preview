@@ -8,11 +8,13 @@ import FileAttachment from "./fileAttachment";
 import { EChart } from "./interface/contentPreview.interface";
 import { IsJsonString } from "./utils/helpers";
 import BackToTop from "./backToTop";
+import RenderSwagger from "./renderSwagger";
 
 interface IProps {
   versionId?: number;
 }
 
+let timeOut: number;
 const RenderClientSideContent: React.FC<IProps> = ({ versionId }) => {
   const rootMap = useRef<Map<Element, any>>(new Map());
 
@@ -101,14 +103,93 @@ const RenderClientSideContent: React.FC<IProps> = ({ versionId }) => {
     }
   };
 
+  const getSwaggers = () => {
+    const swaggerList = document.getElementsByClassName("swagger");
+    if (swaggerList && swaggerList.length) {
+      for (let i = 0; i < swaggerList.length; ++i) {
+        const swaggerEl = swaggerList[i] as HTMLElement;
+        if (swaggerEl) {
+          swaggerEl.removeAttribute("style");
+          swaggerEl.setAttribute("style", "");
+          swaggerEl.style.border = "none";
+          swaggerEl.style.background = "none";
+          const swaggerLink = swaggerEl.getAttribute("swagger-link");
+          const swaggerTitle = swaggerEl.getAttribute("swagger-title");
+          const swaggerPath = swaggerEl.getAttribute("swagger-path");
+          const swaggerMethod = swaggerEl.getAttribute("swagger-method");
+
+          if (swaggerTitle && swaggerLink && swaggerPath && window) {
+            renderComponent(
+              swaggerEl,
+              <RenderSwagger
+                title={swaggerTitle}
+                link={swaggerLink}
+                path={swaggerPath}
+                method={swaggerMethod}
+              />
+            );
+          }
+        }
+      }
+    }
+  };
+
+  const getCurls = () => {
+    const curls = document.getElementsByClassName("curl");
+
+    if (curls && curls.length) {
+      for (let i = 0; i < curls.length; ++i) {
+        const docElement = curls[i] as HTMLElement;
+        if (docElement) {
+          docElement.removeAttribute("style");
+          docElement.setAttribute("style", "");
+          docElement.style.border = "none";
+          docElement.style.background = "none";
+          let codeContent = docElement.getAttribute("data-code");
+          if (codeContent && IsJsonString(codeContent) && window) {
+            codeContent = codeContent.replace(/<-h/g, "<h");
+            const jsonLanguages = JSON.parse(codeContent);
+            const link = docElement.getAttribute("data-link");
+            renderComponent(
+              docElement,
+              <CodeTabs languages={jsonLanguages} link={null} />
+            );
+          }
+        }
+      }
+    }
+  };
+
+  const getInnerDocument = () => {
+    const editBtn = document.getElementsByClassName(
+      "external-document-edit-btn"
+    );
+    const deleteBtn = document.getElementsByClassName(
+      "external-document-delete-btn"
+    );
+
+    if (editBtn && deleteBtn) {
+      const externalDocBtn = [editBtn, deleteBtn];
+      for (let i = 0; i < externalDocBtn.length; ++i) {
+        (externalDocBtn[i] as any).style.display = "none";
+      }
+    }
+  };
+
   useEffect(() => {
     scrollToTopMain();
   }, [versionId]);
 
   useEffect(() => {
-    getCodeSnippets();
-    getFileAttachments();
-    getCharts();
+    clearTimeout(timeOut);
+    timeOut = window.setTimeout(() => {
+      getCodeSnippets();
+      getFileAttachments();
+      getCharts();
+      getSwaggers();
+      getCurls();
+      getInnerDocument();
+    }, 100);
   }, []);
 
   return (

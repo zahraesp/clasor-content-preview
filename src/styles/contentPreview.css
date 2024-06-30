@@ -807,3 +807,45 @@
 .clasor-preview-content div {
   @apply overflow-x-auto;
 }
+
+*[dir="ltr"] {
+  text-align: left !important;
+}
+
+*[dir="rtl"] {
+  text-align: right !important;
+}
+
+li[style*="left"] {
+  direction: ltr !important;
+  margin-left: 5px;
+}
+
+li[style*="right"] {
+  direction: rtl !important;
+}
+
+li[style*="center"] {
+  list-style-position: inside !important;
+}
+
+figure img,
+figure.image-style-align-center {
+  @apply text-center mx-auto
+}
+
+figure.image-style-block-align-right {
+  @apply table mr-0 ml-auto
+}
+
+figure.image-style-block-align-left {
+  @apply table mr-auto ml-0
+}
+
+figure.image-style-align-right {
+  @apply table float-right ml-8 mb-4
+}
+
+figure.image-style-align-left {
+  @apply table float-left mr-8 mb-4
+}
