@@ -4,11 +4,11 @@ declare interface IProps {
   fileHash: string;
   fileName: string;
   fileExtension: string;
+  podSpaceServer?: string;
 }
 
 const FileAttachment = (props: IProps) => {
-  const { fileHash, fileName, fileExtension } = props;
-  const podSpaceServer = process.env.NEXT_PUBLIC_POD_SPACE;
+  const { fileHash, fileName, fileExtension, podSpaceServer } = props;
   const token = process.env.API_TOKEN;
   const [, setOpen] = React.useState(false);
 

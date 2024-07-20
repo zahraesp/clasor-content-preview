@@ -12,10 +12,11 @@ import RenderSwagger from "./renderSwagger";
 
 interface IProps {
   versionId?: number;
+  podSpaceServer?: string;
 }
 
 let timeOut: number;
-const RenderClientSideContent: React.FC<IProps> = ({ versionId }) => {
+const RenderClientSideContent: React.FC<IProps> = ({ versionId, podSpaceServer }) => {
   const rootMap = useRef<Map<Element, any>>(new Map());
 
   // eslint-disable-next-line unicorn/consistent-function-scoping
@@ -96,6 +97,7 @@ const RenderClientSideContent: React.FC<IProps> = ({ versionId }) => {
               fileName={fileName}
               fileHash={fileHash}
               fileExtension={fileExtension}
+              podSpaceServer={podSpaceServer}
             />,
           );
         }
@@ -123,7 +125,7 @@ const RenderClientSideContent: React.FC<IProps> = ({ versionId }) => {
               swaggerEl,
               <RenderSwagger
                 title={swaggerTitle}
-                link={swaggerLink}
+                link={swaggerLink || ""}
                 path={swaggerPath}
                 method={swaggerMethod}
               />
@@ -149,7 +151,6 @@ const RenderClientSideContent: React.FC<IProps> = ({ versionId }) => {
           if (codeContent && IsJsonString(codeContent) && window) {
             codeContent = codeContent.replace(/<-h/g, "<h");
             const jsonLanguages = JSON.parse(codeContent);
-            const link = docElement.getAttribute("data-link");
             renderComponent(
               docElement,
               <CodeTabs languages={jsonLanguages} link={null} />
