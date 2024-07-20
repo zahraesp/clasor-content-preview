@@ -4,9 +4,10 @@ import Tree from "./tree";
 
 interface IProps {
   outline: string;
+  classicEditor?: boolean;
 }
 
-const Outline: React.FC<IProps> = ({ outline }: IProps) => {
+const Outline: React.FC<IProps> = ({ outline, classicEditor }: IProps) => {
   const [shrink, setShrink] = useState<string[]>([]);
   const [activeId, setActiveLink] = useState("");
 
@@ -30,8 +31,8 @@ const Outline: React.FC<IProps> = ({ outline }: IProps) => {
   }
 
   return (
-    <div className="clasor-outline container min-w-[300px] p-6">
-      <div className="flex items-center justify-between w-full">
+    <div className={`clasor-outline container ${classicEditor ? "min-w-[250px] p-0" : "p-6 min-w-[300px]"}`}>
+      <div className={`flex items-center justify-between w-full ${classicEditor ? "hidden" : "flex"}`}>
         <h3 className="text-2xl">نمای کلی</h3>
       </div>
 
