@@ -162,10 +162,6 @@ const ChartJs = (props: IProps) => {
     );
   }
   if (type === EChart.pie) {
-    const options = {
-      maintainAspectRatio: false,
-    };
-
     const sampledata = {
       labels: labels || [],
       datasets: [
