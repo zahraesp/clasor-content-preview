@@ -1,6 +1,34 @@
 import React from "react";
 import { Bar, Doughnut, Line, Pie, PolarArea } from "react-chartjs-2";
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+  ArcElement,
+  PointElement,
+  LineController,
+  LineElement,
+  RadialLinearScale,
+} from "chart.js";
 import { EChart } from "./interface/contentPreview.interface";
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  BarElement,
+  ArcElement,
+  LineController,
+  LineElement,
+  RadialLinearScale,
+  Title,
+  Tooltip,
+  Legend
+);
 
 declare interface IProps {
   type: EChart;
@@ -14,13 +42,11 @@ const ChartJs = (props: IProps) => {
   let labels: string[] = [];
   let datasets: { data: number[]; backgroundColor: string }[] = [];
   let innerData: number[] = [];
-  for (const d of data) {
+  data.forEach((d) => {
     labels = [...labels, d.label];
     innerData = [...innerData, d.value];
-  }
-  datasets = [{
-    data: innerData, backgroundColor: "#cbdde6",
-  }];
+  });
+  datasets = [{ data: innerData, backgroundColor: "#cbdde6" }];
   const chartdata = {
     labels,
     datasets,
@@ -55,7 +81,8 @@ const ChartJs = (props: IProps) => {
       labels: labels || [],
       datasets: [
         {
-          data: (datasets[0] && datasets[0].data) || [],
+          label: "# of Votes",
+          data: datasets[0].data || [],
           backgroundColor: [
             "rgba(255, 99, 132, 0.2)",
             "rgba(54, 162, 235, 0.2)",
@@ -94,6 +121,15 @@ const ChartJs = (props: IProps) => {
   }
   if (type === EChart.line) {
     const options = {
+      scales: {
+        yAxes: [
+          {
+            ticks: {
+              beginAtZero: true,
+            },
+          },
+        ],
+      },
       plugins: {
         legend: {
           display: false,
@@ -104,7 +140,7 @@ const ChartJs = (props: IProps) => {
       labels: labels || [],
       datasets: [
         {
-          data: (datasets[0] && datasets[0].data) || [],
+          data: datasets[0].data || [],
           fill: true,
           backgroundColor: "rgb(192 208 216 / 55%)",
           pointBackgroundColor: "rgb(192 208 216)",
@@ -129,11 +165,13 @@ const ChartJs = (props: IProps) => {
     const options = {
       maintainAspectRatio: false,
     };
+
     const sampledata = {
       labels: labels || [],
       datasets: [
         {
-          data: (datasets[0] && datasets[0].data) || [],
+          label: "# of Votes",
+          data: datasets[0].data || [],
           backgroundColor: [
             "rgba(255, 99, 132, 0.2)",
             "rgba(54, 162, 235, 0.2)",
@@ -166,7 +204,7 @@ const ChartJs = (props: IProps) => {
           height: `${height}px`,
         }}
       >
-        <Pie data={sampledata} options={options} />
+        <Pie data={sampledata} />
       </div>
     );
   }
@@ -178,7 +216,8 @@ const ChartJs = (props: IProps) => {
       labels: labels || [],
       datasets: [
         {
-          data: (datasets[0] && datasets[0].data) || [],
+          label: "# of Votes",
+          data: datasets[0].data || [],
           backgroundColor: [
             "rgba(255, 99, 132, 0.2)",
             "rgba(54, 162, 235, 0.2)",
@@ -215,7 +254,7 @@ const ChartJs = (props: IProps) => {
       </div>
     );
   }
-  return <div>CHART TYPE NOT FOUND</div>;
+  return <div>CHART TYPE NOT FOUND ????</div>;
 };
 
 export default ChartJs;
